@@ -281,10 +281,30 @@ You'll see something like:
 
 ---
 
-## Bonus Challenges (Try These Next)
+## Bonus Features (Implemented)
 
-1. **Edit a task's title** — add an `edit` command
-2. **Add priority levels** — high, medium, low
-3. **Add due dates** — use `datetime` module
-4. **Clear all completed** — delete all tasks where `done` is True
-5. **Color output** — use `\033[32m` for green (done) and `\033[0m` to reset
+All bonus challenges have been implemented in `todo.py`:
+
+1. **Edit a task's title** — `edit` command lets you rename any task
+2. **Priority levels** — when adding a task, set priority to high, medium, or low
+3. **Due dates** — when adding a task, set a due date in YYYY-MM-DD format
+4. **Clear all completed** — `clear` command removes all tasks marked as done
+5. **Color output** — green `[x]` for completed tasks, red/yellow/green for high/medium/low priority, dimmed text for completed task titles
+6. **Search** — `search` command finds tasks by keyword (case-insensitive)
+7. **Sort** — `sort` command reorders tasks by `priority` (high -> low) or `due` date (earliest first)
+8. **Export** — `export` command saves the task list as a plain text file (defaults to `todos.txt`)
+
+### All Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `show` | Display all tasks with status, priority, and due date |
+| `add` | Add a new task (with optional priority and due date) |
+| `edit` | Rename an existing task |
+| `done` | Toggle a task's completion status |
+| `delete` | Remove a task |
+| `search` | Find tasks by keyword |
+| `sort` | Sort tasks by priority or due date |
+| `export` | Save tasks as a plain text file |
+| `clear` | Remove all completed tasks |
+| `quit` | Exit the app |
