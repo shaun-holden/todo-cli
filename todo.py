@@ -151,6 +151,28 @@ def search_todos(todos):
         print(f"  {i + 1}. {status} {title}{pri_str}{due_str}")
     print()
 
+# ---- SORT ----
+
+PRIORITY_ORDER = {"high": 0, "medium": 1, "low": 2, "": 3}
+
+def sort_todos(todos):
+    if not todos:
+        print("  No tasks to sort.")
+        return
+    choice = input("  Sort by (priority/due): ").strip().lower()
+    if choice == "priority":
+        todos.sort(key=lambda t: PRIORITY_ORDER.get(t.get("priority", ""), 3))
+        save_todos(todos)
+        print("  Sorted by priority (high -> medium -> low).")
+        show_todos(todos)
+    elif choice == "due":
+        todos.sort(key=lambda t: t.get("due", "") or "9999-99-99")
+        save_todos(todos)
+        print("  Sorted by due date (earliest first).")
+        show_todos(todos)
+    else:
+        print("  Invalid option. Use 'priority' or 'due'.")
+
 # ---- CLEAR COMPLETED ----
 
 def clear_completed(todos):
@@ -171,7 +193,7 @@ def main():
     print("\n  === TO-DO LIST ===")
 
     while True:
-        print("  Commands: show | add | edit | done | delete | search | clear | quit")
+        print("  Commands: show | add | edit | done | delete | search | sort | clear | quit")
         command = input("  > ").strip().lower()
 
         if command == "show":
@@ -186,12 +208,14 @@ def main():
             delete_todo(todos)
         elif command == "search":
             search_todos(todos)
+        elif command == "sort":
+            sort_todos(todos)
         elif command == "clear":
             clear_completed(todos)
         elif command == "quit":
             print("  Goodbye!")
             break
         else:
-            print("  Unknown command. Try: show, add, edit, done, delete, search, clear, quit")
+            print("  Unknown command. Try: show, add, edit, done, delete, search, sort, clear, quit")
 
 main()
