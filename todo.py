@@ -1,7 +1,18 @@
-# --- STEP 4: Full CRUD To-Do App ---
+# --- Full CRUD To-Do App with Bonus Features ---
 import json
+from datetime import datetime
 
 FILENAME = "todos.json"
+
+# ---- COLORS ----
+
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+RED = "\033[31m"
+RESET = "\033[0m"
+DIM = "\033[2m"
+
+PRIORITY_COLORS = {"high": RED, "medium": YELLOW, "low": GREEN}
 
 # ---- FILE I/O ----
 
@@ -23,10 +34,27 @@ def show_todos(todos):
         print("\n  No tasks yet! Add one with 'add'.\n")
         return
     print("\n  Your To-Do List:")
-    print("  " + "-" * 30)
+    print("  " + "-" * 45)
     for i, task in enumerate(todos):
-        status = "x" if task["done"] else " "
-        print(f"  {i + 1}. [{status}] {task['title']}")
+        if task["done"]:
+            status = f"{GREEN}[x]{RESET}"
+            title = f"{DIM}{task['title']}{RESET}"
+        else:
+            status = "[ ]"
+            title = task["title"]
+
+        priority = task.get("priority", "")
+        pri_str = ""
+        if priority:
+            color = PRIORITY_COLORS.get(priority, "")
+            pri_str = f" {color}({priority}){RESET}"
+
+        due = task.get("due", "")
+        due_str = ""
+        if due:
+            due_str = f" {DIM}due: {due}{RESET}"
+
+        print(f"  {i + 1}. {status} {title}{pri_str}{due_str}")
     print()
 
 # ---- CREATE ----
@@ -36,9 +64,39 @@ def add_todo(todos):
     if not title:
         print("  Task cannot be empty.")
         return
-    todos.append({"title": title, "done": False})
+
+    priority = input("  Priority (high/medium/low or skip): ").strip().lower()
+    if priority not in ("high", "medium", "low"):
+        priority = ""
+
+    due = input("  Due date (YYYY-MM-DD or skip): ").strip()
+    try:
+        datetime.strptime(due, "%Y-%m-%d")
+    except ValueError:
+        due = ""
+
+    task = {"title": title, "done": False, "priority": priority, "due": due}
+    todos.append(task)
     save_todos(todos)
     print(f"  Added: {title}")
+
+# ---- EDIT ----
+
+def edit_todo(todos):
+    show_todos(todos)
+    try:
+        num = int(input("  Task number to edit: "))
+        task = todos[num - 1]
+        new_title = input(f"  New title (was: {task['title']}): ").strip()
+        if not new_title:
+            print("  Title cannot be empty.")
+            return
+        old_title = task["title"]
+        task["title"] = new_title
+        save_todos(todos)
+        print(f"  Renamed: '{old_title}' -> '{new_title}'")
+    except (ValueError, IndexError):
+        print("  Invalid task number.")
 
 # ---- UPDATE ----
 
@@ -66,6 +124,19 @@ def delete_todo(todos):
     except (ValueError, IndexError):
         print("  Invalid task number.")
 
+# ---- CLEAR COMPLETED ----
+
+def clear_completed(todos):
+    completed = [t for t in todos if t["done"]]
+    if not completed:
+        print("  No completed tasks to clear.")
+        return
+    remaining = [t for t in todos if not t["done"]]
+    todos.clear()
+    todos.extend(remaining)
+    save_todos(todos)
+    print(f"  Cleared {len(completed)} completed task(s).")
+
 # ---- MAIN MENU ----
 
 def main():
@@ -73,21 +144,25 @@ def main():
     print("\n  === TO-DO LIST ===")
 
     while True:
-        print("  Commands: show | add | done | delete | quit")
+        print("  Commands: show | add | edit | done | delete | clear | quit")
         command = input("  > ").strip().lower()
 
         if command == "show":
             show_todos(todos)
         elif command == "add":
             add_todo(todos)
+        elif command == "edit":
+            edit_todo(todos)
         elif command == "done":
             toggle_todo(todos)
         elif command == "delete":
             delete_todo(todos)
+        elif command == "clear":
+            clear_completed(todos)
         elif command == "quit":
             print("  Goodbye!")
             break
         else:
-            print("  Unknown command. Try: show, add, done, delete, quit")
+            print("  Unknown command. Try: show, add, edit, done, delete, clear, quit")
 
 main()
