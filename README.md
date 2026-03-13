@@ -307,4 +307,5 @@ All bonus challenges have been implemented in `todo.py`:
 | `sort` | Sort tasks by priority or due date |
 | `export` | Save tasks as a plain text file |
 | `clear` | Remove all completed tasks |
+| `help` | Show all available commands |
 | `quit` | Exit the app |
