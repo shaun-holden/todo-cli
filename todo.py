@@ -207,6 +207,24 @@ def clear_completed(todos):
     save_todos(todos)
     print(f"  Cleared {len(completed)} completed task(s).")
 
+# ---- HELP ----
+
+def show_help():
+    print("\n  Available Commands:")
+    print("  " + "-" * 45)
+    print("  show     Display all tasks")
+    print("  add      Add a new task (with priority and due date)")
+    print("  edit     Rename an existing task")
+    print("  done     Toggle a task's completion status")
+    print("  delete   Remove a task")
+    print("  search   Find tasks by keyword")
+    print("  sort     Sort tasks by priority or due date")
+    print("  export   Save tasks as a plain text file")
+    print("  clear    Remove all completed tasks")
+    print("  help     Show this help message")
+    print("  quit     Exit the app")
+    print()
+
 # ---- MAIN MENU ----
 
 def main():
@@ -214,7 +232,7 @@ def main():
     print("\n  === TO-DO LIST ===")
 
     while True:
-        print("  Commands: show | add | edit | done | delete | search | sort | export | clear | quit")
+        print("  Commands: show | add | edit | done | delete | search | sort | export | clear | help | quit")
         command = input("  > ").strip().lower()
 
         if command == "show":
@@ -235,10 +253,12 @@ def main():
             export_todos(todos)
         elif command == "clear":
             clear_completed(todos)
+        elif command == "help":
+            show_help()
         elif command == "quit":
             print("  Goodbye!")
             break
         else:
-            print("  Unknown command. Try: show, add, edit, done, delete, search, sort, export, clear, quit")
+            print("  Unknown command. Type 'help' for a list of commands.")
 
 main()
