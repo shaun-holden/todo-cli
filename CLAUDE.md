@@ -12,7 +12,7 @@ A command-line to-do list application built in Python as a learning project. It 
 python3 todo.py
 ```
 
-Interactive commands inside the app: `show`, `add`, `edit`, `done`, `delete`, `search`, `sort`, `export`, `clear`, `quit`.
+Interactive commands inside the app: `show`, `add`, `edit`, `done`, `delete`, `search`, `sort`, `export`, `clear`, `help`, `quit`.
 
 ## Architecture
 
