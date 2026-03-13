@@ -173,6 +173,27 @@ def sort_todos(todos):
     else:
         print("  Invalid option. Use 'priority' or 'due'.")
 
+# ---- EXPORT ----
+
+def export_todos(todos):
+    if not todos:
+        print("  No tasks to export.")
+        return
+    filename = input("  Export filename (default: todos.txt): ").strip()
+    if not filename:
+        filename = "todos.txt"
+    with open(filename, "w") as f:
+        f.write("TO-DO LIST\n")
+        f.write("=" * 45 + "\n\n")
+        for i, task in enumerate(todos):
+            status = "[x]" if task["done"] else "[ ]"
+            priority = task.get("priority", "")
+            pri_str = f" ({priority})" if priority else ""
+            due = task.get("due", "")
+            due_str = f" due: {due}" if due else ""
+            f.write(f"{i + 1}. {status} {task['title']}{pri_str}{due_str}\n")
+    print(f"  Exported {len(todos)} task(s) to {filename}")
+
 # ---- CLEAR COMPLETED ----
 
 def clear_completed(todos):
@@ -193,7 +214,7 @@ def main():
     print("\n  === TO-DO LIST ===")
 
     while True:
-        print("  Commands: show | add | edit | done | delete | search | sort | clear | quit")
+        print("  Commands: show | add | edit | done | delete | search | sort | export | clear | quit")
         command = input("  > ").strip().lower()
 
         if command == "show":
@@ -210,12 +231,14 @@ def main():
             search_todos(todos)
         elif command == "sort":
             sort_todos(todos)
+        elif command == "export":
+            export_todos(todos)
         elif command == "clear":
             clear_completed(todos)
         elif command == "quit":
             print("  Goodbye!")
             break
         else:
-            print("  Unknown command. Try: show, add, edit, done, delete, search, sort, clear, quit")
+            print("  Unknown command. Try: show, add, edit, done, delete, search, sort, export, clear, quit")
 
 main()
