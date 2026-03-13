@@ -1,5 +1,6 @@
-# Data file (generated at runtime)
+# Data and export files (generated at runtime)
 todos.json
+todos.txt
 
 # Python
 __pycache__/
