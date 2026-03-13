@@ -124,6 +124,33 @@ def delete_todo(todos):
     except (ValueError, IndexError):
         print("  Invalid task number.")
 
+# ---- SEARCH ----
+
+def search_todos(todos):
+    keyword = input("  Search keyword: ").strip().lower()
+    if not keyword:
+        print("  Keyword cannot be empty.")
+        return
+    matches = [(i, t) for i, t in enumerate(todos) if keyword in t["title"].lower()]
+    if not matches:
+        print(f"  No tasks matching '{keyword}'.")
+        return
+    print(f"\n  Results for '{keyword}':")
+    print("  " + "-" * 45)
+    for i, task in matches:
+        if task["done"]:
+            status = f"{GREEN}[x]{RESET}"
+            title = f"{DIM}{task['title']}{RESET}"
+        else:
+            status = "[ ]"
+            title = task["title"]
+        priority = task.get("priority", "")
+        pri_str = f" {PRIORITY_COLORS.get(priority, '')}({priority}){RESET}" if priority else ""
+        due = task.get("due", "")
+        due_str = f" {DIM}due: {due}{RESET}" if due else ""
+        print(f"  {i + 1}. {status} {title}{pri_str}{due_str}")
+    print()
+
 # ---- CLEAR COMPLETED ----
 
 def clear_completed(todos):
@@ -144,7 +171,7 @@ def main():
     print("\n  === TO-DO LIST ===")
 
     while True:
-        print("  Commands: show | add | edit | done | delete | clear | quit")
+        print("  Commands: show | add | edit | done | delete | search | clear | quit")
         command = input("  > ").strip().lower()
 
         if command == "show":
@@ -157,12 +184,14 @@ def main():
             toggle_todo(todos)
         elif command == "delete":
             delete_todo(todos)
+        elif command == "search":
+            search_todos(todos)
         elif command == "clear":
             clear_completed(todos)
         elif command == "quit":
             print("  Goodbye!")
             break
         else:
-            print("  Unknown command. Try: show, add, edit, done, delete, clear, quit")
+            print("  Unknown command. Try: show, add, edit, done, delete, search, clear, quit")
 
 main()
